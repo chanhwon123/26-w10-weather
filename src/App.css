@@ -1,168 +1,360 @@
 /* ==========================================================
-   26-w10-weather Dashboard Styles
+   26-w10-weather Smart Weather & Air Quality Dashboard Styles
    ========================================================== */
 
+:root {
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --bg-gradient: linear-gradient(135deg, #f0f7ff 0%, #e0eefe 50%, #f8fafc 100%);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(226, 232, 240, 0.8);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* 날씨 상태별 동적 테마 배경 */
 .weather-dashboard {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 32px 20px 48px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  color: #1e293b;
   min-height: 100vh;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+  max-width: 1160px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-main);
+  background: var(--bg-gradient);
+  transition: background 0.8s ease;
   display: flex;
   flex-direction: column;
 }
 
-@media (prefers-color-scheme: dark) {
-  .weather-dashboard {
-    color: #f1f5f9;
-  }
+.weather-dashboard.theme-day.weather-clear {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 40%, #fef3c7 100%);
+}
+.weather-dashboard.theme-day.weather-cloudy {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+}
+.weather-dashboard.theme-day.weather-rainy {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #94a3b8 100%);
+}
+.weather-dashboard.theme-day.weather-snowy {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #dbeafe 100%);
+}
+.weather-dashboard.theme-night {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #090d16 100%);
+  color: #f8fafc;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --card-bg: rgba(30, 41, 59, 0.85);
+  --card-border: rgba(51, 65, 85, 0.7);
 }
 
 /* 헤더 */
 .dashboard-header {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.header-title-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
-.header-icon {
+@media (max-width: 840px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-logo-icon {
   color: #3b82f6;
+  flex-shrink: 0;
 }
 
-.dashboard-header h1 {
-  font-size: 1.85rem;
+.header-title {
+  font-size: 1.7rem;
   font-weight: 800;
-  letter-spacing: -0.5px;
   margin: 0;
-  background: linear-gradient(135deg, #1d4ed8, #3b82f6, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
 }
 
 .header-subtitle {
-  font-size: 0.95rem;
-  color: #64748b;
-  margin-top: 8px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 4px 0 0;
 }
 
-/* 주요 도시 버튼 그룹 */
-.city-selector-section {
-  margin-bottom: 28px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  border-radius: 16px;
-  padding: 18px 20px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+/* 도시 검색 입력창 */
+.header-search-wrap {
+  width: 360px;
+  flex-shrink: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  .city-selector-section {
-    background: rgba(30, 41, 59, 0.7);
-    border-color: rgba(51, 65, 85, 0.8);
+@media (max-width: 840px) {
+  .header-search-wrap {
+    width: 100%;
   }
+}
+
+.city-search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 8px 14px;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.search-icon {
+  color: var(--text-muted);
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 0.92rem;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-spinner {
+  color: var(--primary);
+  animation: spin 1s linear infinite;
+  margin-left: 8px;
+}
+
+.search-clear-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 0.15s;
+}
+
+.search-clear-btn:hover {
+  color: var(--text-main);
+}
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(12px);
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.search-result-item:hover {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.result-pin {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.result-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.result-details {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.search-no-result {
+  padding: 16px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* 도시 선택 섹션 */
+.city-selector-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
+}
+
+.selector-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px;
+}
+
+.group-icon {
+  color: var(--primary);
 }
 
 .section-title {
   font-size: 0.85rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #64748b;
-  margin: 0 0 12px 0;
+  color: var(--text-muted);
+  margin: 0;
+  letter-spacing: -0.2px;
 }
 
 .city-btn-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .city-btn {
-  padding: 8px 16px;
-  font-size: 0.9rem;
+  padding: 6px 14px;
+  font-size: 0.85rem;
   font-weight: 600;
   border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #334155;
+  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-main);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
+.theme-night .city-btn {
+  background: rgba(15, 23, 42, 0.6);
+}
+
 .city-btn:hover {
-  border-color: #3b82f6;
-  color: #2563eb;
+  border-color: var(--primary);
+  color: var(--primary);
   transform: translateY(-1px);
 }
 
 .city-btn.active {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: var(--primary);
+  border-color: var(--primary);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
 }
 
-@media (prefers-color-scheme: dark) {
-  .city-btn {
-    background: #1e293b;
-    border-color: #475569;
-    color: #e2e8f0;
-  }
-  .city-btn:hover {
-    border-color: #60a5fa;
-    color: #93c5fd;
-  }
-  .city-btn.active {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-  }
+.recent-city-pill-wrap {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
 }
 
-/* 대시보드 메인 콘텐츠 */
+.recent-btn {
+  padding-right: 28px;
+}
+
+.recent-remove-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+}
+
+.recent-remove-btn:hover {
+  color: #ef4444;
+}
+
+/* 대시보드 상태 인디케이터 */
 .dashboard-content {
   flex-grow: 1;
 }
 
-/* 상태 인디케이터 (로딩/에러) */
 .status-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 280px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid #e2e8f0;
+  min-height: 320px;
+  border-radius: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   padding: 40px 20px;
   text-align: center;
-}
-
-@media (prefers-color-scheme: dark) {
-  .status-container {
-    background: rgba(30, 41, 59, 0.6);
-    border-color: #334155;
-  }
+  box-shadow: var(--shadow-sm);
 }
 
 .loading-container .spinner-icon {
-  color: #3b82f6;
+  color: var(--primary);
   animation: spin 1s linear infinite;
   margin-bottom: 16px;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 .error-container .error-icon {
@@ -170,19 +362,19 @@
   margin-bottom: 16px;
 }
 
-.error-container p {
-  color: #ef4444;
+.status-title {
+  font-size: 1rem;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin: 0 0 16px;
 }
 
 .retry-btn {
-  padding: 8px 18px;
-  border-radius: 8px;
+  padding: 8px 20px;
+  border-radius: 10px;
   border: none;
-  background: #ef4444;
+  background: var(--primary);
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s;
 }
@@ -191,19 +383,32 @@
   opacity: 0.9;
 }
 
-/* 카드 그리드 */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 대시보드 그리드 레이아웃 */
+.dashboard-grid-layout {
+  display: flex;
+  flex-direction: column;
   gap: 24px;
 }
 
+.top-cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+/* 공통 카드 스타일 */
 .dashboard-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
   padding: 24px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -211,15 +416,7 @@
 
 .dashboard-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 20px -3px rgba(0, 0, 0, 0.08);
-}
-
-@media (prefers-color-scheme: dark) {
-  .dashboard-card {
-    background: #1e293b;
-    border-color: #334155;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-  }
+  box-shadow: var(--shadow-lg);
 }
 
 .card-header {
@@ -229,43 +426,94 @@
   margin-bottom: 20px;
 }
 
-.city-heading {
-  font-size: 1.4rem;
+.city-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.card-icon, .air-card-icon {
+  color: var(--primary);
+}
+
+.city-heading, .card-title {
+  font-size: 1.35rem;
   font-weight: 800;
-  margin: 0 0 4px 0;
-}
-
-.time-badge {
-  font-size: 0.8rem;
-  color: #94a3b8;
-}
-
-.card-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-}
-
-.card-desc {
-  font-size: 0.8rem;
-  color: #94a3b8;
   margin: 0;
+  letter-spacing: -0.3px;
 }
 
-/* 날씨 배지 */
+.time-badge, .card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unit-toggle-btn {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-night .unit-toggle-btn {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.unit-toggle-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
 .weather-badge {
   padding: 6px 14px;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.day-night-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
+.day-night-badge.day {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.day-night-badge.night {
+  background: #312e81;
+  color: #c7d2fe;
+}
+
+/* 현재 날씨 상세 */
 .current-temp-wrap {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 22px;
   margin-bottom: 24px;
-  padding: 12px 0;
+}
+
+.main-weather-icon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .temp-numbers {
@@ -274,23 +522,17 @@
 }
 
 .main-temp {
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -1px;
+  letter-spacing: -1.5px;
 }
 
 .apparent-temp {
   font-size: 0.95rem;
-  color: #64748b;
+  color: var(--text-muted);
   margin-top: 6px;
-  font-weight: 500;
-}
-
-@media (prefers-color-scheme: dark) {
-  .apparent-temp {
-    color: #94a3b8;
-  }
+  font-weight: 600;
 }
 
 .weather-details-grid {
@@ -304,87 +546,83 @@
   display: flex;
   flex-direction: column;
   padding: 12px 14px;
-  border-radius: 12px;
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.65);
+  border: 1px solid rgba(241, 245, 249, 0.8);
 }
 
-@media (prefers-color-scheme: dark) {
-  .detail-item {
-    background: #0f172a;
-    border-color: #1e293b;
-  }
+.theme-night .detail-item {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(30, 41, 59, 0.8);
 }
 
 .detail-icon {
-  color: #3b82f6;
-  margin-bottom: 6px;
+  color: var(--primary);
+  margin-bottom: 4px;
 }
 
 .detail-label {
   font-size: 0.75rem;
-  color: #64748b;
-  margin-bottom: 4px;
+  color: var(--text-muted);
 }
 
 .detail-value {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-top: 2px;
 }
 
-/* 미세먼지 카드 스타일 */
+/* 미세먼지 카드 */
 .air-status-badge {
   padding: 6px 14px;
   border-radius: 20px;
   color: #ffffff;
-  font-size: 0.85rem;
-  font-weight: 700;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  font-size: 0.82rem;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .air-metrics-container {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .air-metric-box {
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
-  border-radius: 12px;
-  padding: 14px 16px;
+  background: rgba(248, 250, 252, 0.65);
+  border: 1px solid rgba(241, 245, 249, 0.8);
+  border-radius: 14px;
+  padding: 12px 16px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .air-metric-box {
-    background: #0f172a;
-    border-color: #1e293b;
-  }
+.theme-night .air-metric-box {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(30, 41, 59, 0.8);
 }
 
 .metric-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .metric-name {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 .metric-unit {
-  font-size: 0.75rem;
-  color: #94a3b8;
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
 .metric-val-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .metric-value {
@@ -394,22 +632,20 @@
 }
 
 .metric-grade {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 800;
 }
 
 .gauge-bar {
   width: 100%;
   height: 8px;
-  background: #e2e8f0;
+  background: rgba(226, 232, 240, 0.8);
   border-radius: 999px;
   overflow: hidden;
 }
 
-@media (prefers-color-scheme: dark) {
-  .gauge-bar {
-    background: #334155;
-  }
+.theme-night .gauge-bar {
+  background: #334155;
 }
 
 .gauge-fill {
@@ -418,38 +654,254 @@
   transition: width 0.6s ease;
 }
 
-.air-guide-msg {
-  margin-top: auto;
-  font-size: 0.85rem;
-  line-height: 1.45;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: #eff6ff;
-  color: #1e40af;
-  border: 1px solid #dbeafe;
+.gauge-limits {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .air-guide-msg {
-    background: #172554;
-    color: #bfdbfe;
-    border-color: #1e3a8a;
+.air-guide-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  margin-top: auto;
+}
+
+.guide-icon {
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.guide-text {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 0;
+  color: var(--text-main);
+}
+
+/* 24시간 시간별 기온 차트 */
+.hourly-card {
+  overflow: hidden;
+}
+
+.hourly-summary-badge {
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--text-main);
+}
+
+.min-accent {
+  color: #0ea5e9;
+}
+
+.max-accent {
+  color: #ef4444;
+}
+
+.chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.hourly-svg-chart {
+  width: 100%;
+  height: 160px;
+  overflow: visible;
+}
+
+.chart-temp-text {
+  font-family: inherit;
+}
+
+.hourly-ticks-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--card-border);
+  overflow-x: auto;
+}
+
+.hourly-tick-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 48px;
+}
+
+.tick-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.tick-temp {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* 7일 주간 일기예보 */
+.weekly-forecast-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.weekly-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.5);
+  border: 1px solid rgba(241, 245, 249, 0.7);
+  gap: 16px;
+  transition: background 0.15s;
+}
+
+.theme-night .weekly-row {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(30, 41, 59, 0.6);
+}
+
+.weekly-row:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.day-col {
+  width: 75px;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.day-date {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.weather-icon-col {
+  width: 130px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-condition-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.precip-col {
+  width: 75px;
+}
+
+.precip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+.precip-none {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.temp-bar-col {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.temp-min-text {
+  font-size: 0.85rem;
+  color: #0ea5e9;
+  font-weight: 700;
+  width: 32px;
+  text-align: right;
+}
+
+.temp-max-text {
+  font-size: 0.85rem;
+  color: #ef4444;
+  font-weight: 700;
+  width: 32px;
+  text-align: left;
+}
+
+.temp-range-track {
+  flex-grow: 1;
+  height: 6px;
+  background: rgba(203, 213, 225, 0.6);
+  border-radius: 999px;
+  position: relative;
+}
+
+.theme-night .temp-range-track {
+  background: #334155;
+}
+
+.temp-range-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #38bdf8, #f59e0b, #ef4444);
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .weekly-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .weather-icon-col {
+    width: auto;
+  }
+  .temp-bar-col {
+    width: 100%;
+    margin-top: 6px;
   }
 }
 
 /* 푸터 */
 .dashboard-footer {
-  text-align: center;
   margin-top: 48px;
   padding-top: 24px;
-  border-top: 1px solid #e2e8f0;
-  font-size: 0.8rem;
-  color: #94a3b8;
-  line-height: 1.6;
+  border-top: 1px solid var(--card-border);
+  text-align: center;
 }
 
-@media (prefers-color-scheme: dark) {
-  .dashboard-footer {
-    border-color: #334155;
-  }
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-content p {
+  margin: 0;
+}
+
+.footer-copy {
+  margin-top: 8px !important;
+  opacity: 0.8;
 }
