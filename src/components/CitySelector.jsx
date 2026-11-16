@@ -6,6 +6,7 @@ export default function CitySelector({
   onSelectCity,
   recentCities = [],
   onRemoveRecentCity,
+  onClearRecentCities,
 }) {
   return (
     <div className="city-selector-section">
@@ -36,6 +37,16 @@ export default function CitySelector({
           <div className="group-header">
             <History size={16} className="group-icon" />
             <h2 className="section-title">최근 본 도시</h2>
+            {onClearRecentCities && (
+              <button
+                type="button"
+                className="recent-clear-all-btn"
+                onClick={onClearRecentCities}
+                title="최근 검색 기록 전체 삭제"
+              >
+                전체 삭제
+              </button>
+            )}
           </div>
           <div className="city-btn-group">
             {recentCities.map((city) => {

@@ -71,6 +71,11 @@ export default function App() {
     })
   }
 
+  const handleClearRecentCities = () => {
+    setRecentCities([])
+    localStorage.removeItem(STORAGE_KEY_RECENT)
+  }
+
   // 데이터 로딩 Effect
   useEffect(() => {
     let ignore = false
@@ -151,6 +156,7 @@ export default function App() {
         onSelectCity={handleSelectCity}
         recentCities={recentCities}
         onRemoveRecentCity={handleRemoveRecentCity}
+        onClearRecentCities={handleClearRecentCities}
       />
 
       {/* 대시보드 메인 본문 */}

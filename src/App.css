@@ -308,6 +308,22 @@
   position: relative;
 }
 
+.recent-clear-all-btn {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-decoration: underline;
+  transition: color 0.15s;
+}
+
+.recent-clear-all-btn:hover {
+  color: #ef4444;
+}
+
 .recent-btn {
   padding-right: 28px;
 }
