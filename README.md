@@ -64,8 +64,8 @@ Open-Meteo의 실시간 기상 관측 및 대기질 모델 API를 기반으로 �
 
 ## 5. 실행 및 배포 링크
 
-- **Netlify 배포 URL**: `https://<사이트이름>.netlify.app` *(배포 후 등록)*
-- **GitHub Pages 배포 URL**: `https://<내-GitHub-아이디>.github.io/26-w10-weather/` *(배포 후 등록)*
+- **Netlify**: https://darling-dusk-e133d5.netlify.app/
+- **GitHub Pages**: https://chanhwon123.github.io/26-w10-weather/
 
 ---
 
